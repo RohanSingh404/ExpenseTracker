@@ -4,17 +4,22 @@ import AuthLayout from '../../components/layouts/AuthLayout'
 import Input from '../../components/inputs'
 import { validateEmail } from '../../utils/helper'
 import ProfilePictureSlector from '../../components/ProfilePictureSlector'
+import { useContext } from 'react'
+import { UserContext } from '../../context/userContext'
+import { API_PATHS } from '../../utils/apiPaths'
+import axiosInstance from '../../utils/axiosInstance'
+import uploadImage from '../../utils/uploadImage'
 const SignUpForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [FullName, setFullName] = useState("");
+    const [fullName, setfullName] = useState("");
     const [Profilepicture, setProfilePicture] = useState("");
 
     const [error, setError] = useState("");
-  
+    const {updateUser} = useContext(UserContext);
     const handleSignUp = async(e) => {
       e.preventDefault();
-      if(!FullName) {
+      if(!fullName) {
         setError('Please enter your full name.');
         return;
       }
@@ -30,6 +35,29 @@ const SignUpForm = () => {
       }
       setError('');
       
+      //signup API
+      let profileImageURL = "";
+      try{
+        
+        if(Profilepicture) {
+          const imgUploadResponse = await uploadImage(Profilepicture);
+          profileImageURL = imgUploadResponse.imageURL || ""; // Assuming the response contains the image URL in this format
+        }
+        
+      const response = await axiosInstance.post(API_PATHS.AUTH.REGISTER, {fullName , email, password , profileImageURL});
+      const {token , user} = response.data;
+      if(token){
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if(error.response && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during SignUp. Please try again.");
+      }
+    }
     }
     const navigate = useNavigate();
 
@@ -48,8 +76,8 @@ const SignUpForm = () => {
             <Input
               label="Full Name"
               type="text"
-              onChange={(e) => setFullName(e.target.value)}
-              value = {FullName}
+              onChange={(e) => setfullName(e.target.value)}
+              value = {fullName}
               placeholder="Enter your full name"
             />
             <Input
@@ -70,15 +98,14 @@ const SignUpForm = () => {
 
           {error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
 
-          <Link to="/signup">
+          
             <button type="submit" className='max-w-full md:w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer'>
               Sign Up
             </button>
-          </Link>
+          
 
-          <Link to="/login">
-            <p>Already have an account? <button className='text-green-500 font-bold hover:opacity-75' onClick={() => navigate('/login')}>Log in</button></p>
-          </Link>
+          
+            <p>Already have an account? <Link to="/login"><button className='text-green-500 font-bold hover:opacity-75 cursor-pointer'>Log in</button></Link></p>
         </form>
       </div>
     </AuthLayout>

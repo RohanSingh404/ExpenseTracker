@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-    FullName: {
+    fullName: {
         type: String,
         required: true,
     },
@@ -27,12 +27,10 @@ const userSchema = new mongoose.Schema({
 );
 
 //Hash Password before saving the user
-userSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
+userSchema.pre('save', async function () {
+    if (!this.isModified('password')) return;
+
     this.password = await bcrypt.hash(this.password, 10);
-    next();
 });
 
 //Method to compare password during login

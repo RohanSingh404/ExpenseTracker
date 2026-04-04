@@ -1,15 +1,20 @@
-import React , {useState} from 'react'
+import React , {useContext , useState} from 'react'
 import { Link , useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import Input from '../../components/inputs'
 import SignUpForm from './SignUpForm'
 import { validateEmail } from '../../utils/helper'
+import { API_PATHS } from '../../utils/apiPaths'
+import axiosInstance from '../../utils/axiosInstance'
+import { UserContext } from '../../context/userContext'
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = (e) => {
+  const {updateUser} = useContext(UserContext);
+
+  const handleLogin = async(e) => {
     e.preventDefault();
 
     if(!validateEmail(email)) {
@@ -22,6 +27,23 @@ const LoginForm = () => {
       return;
     }
     setError('');
+
+    //login API
+    try{
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {email, password});
+      const {token , user} = response.data;
+      if(token){
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if(error.response && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("An error occurred during login. Please try again.");
+      }
+    }
   }
   const navigate = useNavigate();
   return (
@@ -50,15 +72,17 @@ const LoginForm = () => {
 
             {error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
 
-          <Link to="/login">
+          
             <button type="submit" className='w-full md:w-75 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline'>
               Log In
             </button>
-          </Link>
 
-          <Link to="/signup">
-            <p>Don`t have an account? <button className='text-green-500 font-bold hover:opacity-75' onClick={() => navigate('/signup')}>Sign up</button></p>
-          </Link>
+          
+            <p>Don`t have an account? 
+              <Link to="/signup">
+                <button className='text-green-500 font-bold hover:opacity-75 cursor-pointer'>Sign up</button>
+              </Link>
+            </p>
         </form>
       </div>
     </AuthLayout>

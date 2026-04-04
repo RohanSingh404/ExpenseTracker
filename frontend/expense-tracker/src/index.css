@@ -16,3 +16,15 @@
     overflow-x: hidden;
   }
 }
+
+.card{
+  @apply w-full bg-white rounded-2xl shadow-md shadow-gray-100 border border-gray-200/50 p-6;
+}
+
+.card-btn{
+  @apply flex items-center gap-3 text-[12px] font-medium text-gray-700 hover:text-white bg-gray-50 hover:bg-green-600 px-4 py-1.5 rounded-lg border border-gray-200/50 cursor-pointer transform transition-all;
+}
+
+.add-btn{
+  @apply flex justify-center items-center text-[12px] font-bold text-green-600 hover:text-white bg-gray-50 hover:bg-green-600 px-4 py-1.5 rounded-lg border border-gray-200/50 cursor-pointer transform transition-all;
+}

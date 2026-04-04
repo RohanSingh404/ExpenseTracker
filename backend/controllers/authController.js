@@ -1,3 +1,4 @@
+
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
@@ -10,10 +11,11 @@ const generateToken = (id) => {
 
 //register user
 const registerUser = async (req, res) => {
-    const { FullName, email, password , profileImageURL } = req.body || {};
+    console.log("REQ BODY:", req.body);
+    const { fullName, email, password , profileImageURL } = req.body || {};
 
     //validate input
-    if (!FullName || !email || !password) {
+    if (!fullName || !email || !password) {
         return res.status(400).json({ message: 'Please fill in all fields' });
     }
     try {
@@ -25,7 +27,7 @@ const registerUser = async (req, res) => {
 
         //create new user
         const user = await User.create({
-            FullName,
+            fullName,
             email,
             password,
             profileImageURL
@@ -40,6 +42,7 @@ const registerUser = async (req, res) => {
             token }
         );
     } catch (error) {
+        console.error("REGISTER ERROR:", error);
         res.status(500).json({ message: 'Server error' });
     }
 
@@ -69,6 +72,7 @@ const loginUser = async (req, res) => {
             token }
         );
     } catch (error) {
+        console.error("REGISTER ERROR:", error);
         res.status(500).json({ message: 'Server error' });
     }
 }

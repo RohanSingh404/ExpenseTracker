@@ -1,0 +1,40 @@
+import React, { useEffect, useState } from 'react'
+import CustomPieChart from '../Charts/CustomPieChart';
+const COLORS = ["#875CF5", "#FA2C37", "#FF6900", "#4f39f6"];
+
+
+const RecentIncomeWithChart = ({data , totalIncome}) => {
+    const [chartData , setchartData] = useState([]);
+
+    const prepareChartData = () => {
+        const dataArr = data?.map((item) => ({
+            name: item?.source,
+            amount : item?.amount,
+        }));
+
+        setchartData(dataArr);
+    }
+
+    useEffect(() =>{
+        prepareChartData();
+
+        return () => {};
+    },[data])
+  return (
+    <div className='card'>
+        <div className='flex justify-between items-center'>
+            <h5 className='text-sm font-medium'>Last60DaysIncome</h5>
+        </div>
+
+        <CustomPieChart
+        data = {chartData}
+        label = "Total Income"
+        totalAmount = {`$${totalIncome}`}
+        colors = {COLORS}
+        showTextAnchor
+         />
+    </div>
+  )
+}
+
+export default RecentIncomeWithChart
