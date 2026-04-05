@@ -3,9 +3,14 @@ import { SIDE_MENU_DATA } from '../../utils/data'
 import { UserContext } from '../../context/userContext'
 import { useNavigate } from 'react-router-dom'
 import CharAvatar from '../Cards/CharAvatar'
+import { useUserAuth } from '../../hooks/useUserAuth'
+
 const Sidebar = ({activeMenu}) => {
     const {user , clearUser} = useContext(UserContext);
     const navigate = useNavigate();
+
+    // Ensure user data is loaded
+    useUserAuth();
 
     const handleClick = (route) => {
         if(route === "logout"){
@@ -22,7 +27,7 @@ const Sidebar = ({activeMenu}) => {
     }
 
   return (
-    <div className='w-64 p-5 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 shadow-md sticky top-[61px] z-20'>
+    <div className='w-64 p-5 h-screen bg-white border-r border-gray-200/50 shadow-md sticky top-0 z-20'>
     <div className='flex flex-col items-center justify-center gap-3 mt-3 mb-7'>
         {user?.profileImageURL?(
             <img 
@@ -31,14 +36,14 @@ const Sidebar = ({activeMenu}) => {
             className='w-20 h-20 bg-slate-200 rounded-full object-cover' />
         ):
         <CharAvatar
-        fullName={user?.fullName || "Rohan Sharma"}
+        fullName={user?.fullName || ""}
         height="w-20"
         width="h-20"
         style = "text-xl"/>
         }
 
         <h5 className='text-sm font-medium leading-5 text-gray-400'>
-            {user?.fullName || "Rohan Sharma"}
+            {user?.fullName || ""}
         </h5>
     </div>
 

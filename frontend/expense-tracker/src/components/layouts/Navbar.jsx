@@ -17,10 +17,17 @@ const Navbar = ({ activeMenu }) => {
         <h2 className='text-xl font-bold text-green-600 py-3 px-5'>Expense Tracker</h2>
 
         {sideMenuOpen && (
-            <div className="fixed top-[61px] bg-white ">
-                <Sidebar activeMenu={activeMenu} />
-            </div>
-        )}
+    <>
+        {/* Backdrop */}
+        <div 
+            className="fixed inset-0 bg-black/10 z-40 md:hidden"
+            onClick={() => setSideMenuOpen(false)}
+        />
+        <div className="fixed top-0 left-0 w-64 h-[calc(100vh-55px)] bg-white shadow-xl z-50 border-r border-gray-200">
+            <Sidebar activeMenu={activeMenu} />
+        </div>
+    </>
+)}
     </div>
   )
 }

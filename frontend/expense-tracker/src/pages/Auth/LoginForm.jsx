@@ -2,28 +2,32 @@ import React , {useContext , useState} from 'react'
 import { Link , useNavigate } from 'react-router-dom'
 import AuthLayout from '../../components/layouts/AuthLayout'
 import Input from '../../components/inputs'
-import SignUpForm from './SignUpForm'
 import { validateEmail } from '../../utils/helper'
 import { API_PATHS } from '../../utils/apiPaths'
 import axiosInstance from '../../utils/axiosInstance'
 import { UserContext } from '../../context/userContext'
+import toast from 'react-hot-toast'
+
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
   const {updateUser} = useContext(UserContext);
+  const navigate = useNavigate();
 
   const handleLogin = async(e) => {
     e.preventDefault();
 
     if(!validateEmail(email)) {
       setError('Please enter a valid email address.');
+      toast.error('Invalid email address');
       return;
     }
 
     if(!password) {
       setError('Please enter your password.');
+      toast.error('Password is required');
       return;
     }
     setError('');
@@ -35,26 +39,30 @@ const LoginForm = () => {
       if(token){
         localStorage.setItem("token", token);
         updateUser(user);
+        toast.success('Login successful!');
         navigate("/dashboard");
       }
     } catch (error) {
       if(error.response && error.response.data.message) {
         setError(error.response.data.message);
+        toast.error(error.response.data.message);
       } else {
         setError("An error occurred during login. Please try again.");
+        toast.error("An error occurred during login");
       }
     }
   }
-  const navigate = useNavigate();
+
   return (
     <AuthLayout>
-      <div className='ml-15'>
-        <p className='w-full md:w-60 text-center text-gray-700 text-base mb-4'>
-          <span className='text-2xl font-medium'>Welcome to the<br></br> Expense Tracker!</span><br></br>
+      <div className='flex flex-col justify-center items-center'>
+        <p className='w-full  text-center text-gray-700 text-base font-medium mb-2 md:mb-4 p-5 md:p-0'>
+          <span className='text-[18px] md:text-[32px] font-bold'>Welcome to the Expense Tracker!</span>
+          <br></br>
           Please log in to manage your expenses and income effectively.
         </p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className='p-7 md:p-0'>
           <Input
             label="Email"
             type="email"

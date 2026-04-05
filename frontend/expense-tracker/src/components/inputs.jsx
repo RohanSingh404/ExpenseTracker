@@ -4,7 +4,7 @@ import { useState } from 'react';
 const Input = ({ label, type, placeholder , value, onChange}) => {
     const [showPassword, setShowPassword] = useState(false);
   return (
-    <div className='mt-4'>
+    <div className=' mt-4'>
       <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor={label}>
         {label}
       </label>
