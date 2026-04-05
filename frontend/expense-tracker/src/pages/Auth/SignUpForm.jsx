@@ -9,6 +9,8 @@ import { UserContext } from '../../context/userContext'
 import { API_PATHS } from '../../utils/apiPaths'
 import axiosInstance from '../../utils/axiosInstance'
 import uploadImage from '../../utils/uploadImage'
+import toast from 'react-hot-toast'
+
 const SignUpForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -17,23 +19,36 @@ const SignUpForm = () => {
 
     const [error, setError] = useState("");
     const {updateUser} = useContext(UserContext);
+
     const handleSignUp = async(e) => {
       e.preventDefault();
+      
       if(!fullName) {
         setError('Please enter your full name.');
+        toast.error('Full name is required');
         return;
       }
       
       if(!validateEmail(email)) {
         setError('Please enter a valid email address.');
+        toast.error('Invalid email address');
         return;
       }
   
       if(!password) {
         setError('Please enter your password.');
+        toast.error('Password is required');
         return;
       }
+
+      if(password.length < 6) {
+        setError('Password must be at least 6 characters long.');
+        toast.error('Password too short');
+        return;
+      }
+
       setError('');
+      
       
       //signup API
       let profileImageURL = "";
@@ -64,49 +79,71 @@ const SignUpForm = () => {
   return (
     <div>
       <AuthLayout>
-      <div className='ml-15'>
-        <p className='w-full md:w-60 text-center text-gray-700 text-base mb-4'>
-          <span className='text-2xl font-medium'>Welcome to the<br></br> Expense Tracker!</span><br></br>
+      <div className='p-7 md:p-0 md:w-full'>
+        <p className='w-full  text-center text-gray-700 text-sm md:text-base font-medium mb-4'>
+          <span className='text-[18px] md:text-[32px] font-bold'>Welcome to the Expense Tracker!</span>
+          <br></br>
           Please Sign Up to manage your expenses and income effectively.
         </p>
 
-        <form onSubmit={handleSignUp}>
-          <ProfilePictureSlector image={Profilepicture} setImage={setProfilePicture} />
-          <div className='md:flex gap-2'>
-            <Input
-              label="Full Name"
-              type="text"
-              onChange={(e) => setfullName(e.target.value)}
-              value = {fullName}
-              placeholder="Enter your full name"
+          <form onSubmit={handleSignUp} className='space-y-1'>
+            
+            <ProfilePictureSlector 
+              image={Profilepicture} 
+              setImage={setProfilePicture} 
             />
+
+            <div className='flex flex-col items-center justify-center  gap-1 mb-5'>
+              <Input
+                label="Full Name"
+                type="text"
+                onChange={(e) => setfullName(e.target.value)}
+                value={fullName}
+                placeholder="Enter your full name"
+              />
+              <Input
+                label="Email"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+                placeholder="Enter your email"
+              />
+            
+
             <Input
-              label="Email"
-              type="email"
-              onChange={(e) => setEmail(e.target.value)}
-              value = {email}
-              placeholder="Enter your email"
+              label="Password"
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              placeholder="Enter your password"
             />
-          </div>
-          <Input
-            label="Password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value = {password}
-            placeholder="Enter your password"
-          />
+            
 
-          {error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
+            {error && (
+              <p className='text-red-500 text-sm mb-2'>{error}</p>
+            )}
 
-          
-            <button type="submit" className='max-w-full md:w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer'>
+            <button
+              type="submit"
+              className='w-full md:w-75 flex justify-center items-center bg-green-600 hover:bg-green-700 transition-all duration-200 text-white font-semibold py-2.5 rounded-lg shadow-md hover:shadow-lg focus:outline-none mt-2'
+            >
               Sign Up
             </button>
-          
 
-          
-            <p>Already have an account? <Link to="/login"><button className='text-green-500 font-bold hover:opacity-75 cursor-pointer'>Log in</button></Link></p>
-        </form>
+            
+
+            <p className='text-sm text-gray-600 text-center'>
+              Already have an account?{" "}
+              <Link to="/login">
+                <button className='text-green-600 font-semibold hover:underline cursor-pointer'>
+                  Log in
+                </button>
+              </Link>
+            </p>
+
+            </div>
+
+          </form>
       </div>
     </AuthLayout>
     </div>

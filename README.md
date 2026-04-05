@@ -246,4 +246,8 @@ Built with ❤️ using React, Node.js, and MongoDB
 
 ---
 
+<<<<<<< HEAD
 **Note:** This is a personal finance management tool. Always backup your data and use strong passwords for account security.
+=======
+**Note:** This is a personal finance management tool. Always backup your data and use strong passwords for account security.
+>>>>>>> 7e852e0 (your message)
