@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import RecentTransactions from '../../components/Dashboard/RecentTransactions';
 import FinanceOverview from '../../components/Dashboard/FinanceOverview';
 import ExpenseTransactions from '../../components/Dashboard/ExpenseTransactions';
-import Last30daysExpenses from '../../components/Dashboard/last30daysExpenses';
+import Last30daysExpenses from '../../components/Dashboard/Last30daysExpenses';
 import RecentIncomeWithChart from '../../components/Dashboard/RecentIncomeWithChart';
 import RecentIncome from '../../components/Dashboard/RecentIncome';
 import toast from 'react-hot-toast';
