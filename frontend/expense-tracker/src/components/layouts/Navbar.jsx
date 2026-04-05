@@ -1,6 +1,7 @@
 import React , {useState} from 'react'
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi'
 import Sidebar from './Sidebar'
+import { Link } from 'react-router-dom';
 const Navbar = ({ activeMenu }) => {
     const [sideMenuOpen, setSideMenuOpen] = useState(false);  
   return (
@@ -14,7 +15,9 @@ const Navbar = ({ activeMenu }) => {
         </button>
         
         
-        <h2 className='text-xl font-bold text-green-600 py-3 px-5'>Expense Tracker</h2>
+        <Link to="/dashboard">
+            <h2 className='text-xl font-bold text-green-600 py-3 px-5 '>Expense Tracker</h2>
+        </Link>
 
         {sideMenuOpen && (
     <>

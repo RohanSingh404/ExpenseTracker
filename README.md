@@ -246,4 +246,6 @@ Built with ❤️ using React, Node.js, and MongoDB
 
 ---
 
+
 **Note:** This is a personal finance management tool. Always backup your data and use strong passwords for account security.
+
